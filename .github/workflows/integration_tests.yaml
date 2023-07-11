@@ -1,0 +1,77 @@
+name: integration tests
+on: [push]
+jobs:
+  setup:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Bitcoin Core
+        if: steps.cache-bitcoin.outputs.cache-hit != 'true'
+        uses: ./.github/actions/setup-bitcoin
+        with:
+          bitcoin-version: '22.0'
+
+      - name: Setup LND LSP
+        if: steps.cache-lnd-lsp.outputs.cache-hit != 'true'
+        uses: ./.github/actions/setup-lnd-lsp
+        with:
+          lsp-ref: 'breez-node-v0.16.2-beta'
+          go-version: ^1.19
+
+      - name: Setup LND client
+        if: steps.cache-lnd-client.outputs.cache-hit != 'true'
+        uses: ./.github/actions/setup-lnd-client
+        with:
+          client-ref: 'v0.16.2-breez'
+          go-version: ^1.19
+
+      - name: Set up Core Lightning
+        uses: ./.github/actions/setup-clightning
+        with:
+          checkout-version: 'v23.05.1'
+
+      ##############
+      # Build LSPD #
+      ##############
+
+      - name: Build LSPD
+        run: |
+          go get github.com/breez/lspd
+          go get github.com/breez/lspd/cln_plugin
+          go build .
+          go build -o lspd_plugin ./cln_plugin/cmd
+        shell: bash
+
+      - name: Test LSPD
+        run: |
+          go get github.com/breez/lspd/itest
+          go test -timeout 20m -v \
+            ./itest \
+            -test.run \
+            TestLspd/CLN-lspd:_testFailureBobOffline \
+            --bitcoindexec /usr/bin/bitcoind \
+            --bitcoincliexec /usr/bin/bitcoin-cli \
+            --lightningdexec ${GITHUB_WORKSPACE}/lightning_git/lightningd/lightningd \
+            --lndexec ~/go_lnd_lsp/bin/lnd \
+            --lndmobileexec ~/go_lnd_client/bin/lnd \
+            --clnpluginexec ${GITHUB_WORKSPACE}/lspd_plugin \
+            --lspdexec ${GITHUB_WORKSPACE}/lspd \
+            --lspdmigrationsdir ${GITHUB_WORKSPACE}/postgresql/migrations \
+            --testdir ~/test_state \
+            --preservestate
+        shell: bash
+        # remove the following line once all tests pass
+        continue-on-error: true
+
+      - name: Tar state
+        run: |
+          find ~/test_state -type f -o -type d | tar -czf ~/test_state.tar.gz -T -
+        shell: bash
+ 
+      - name: Upload test_state as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test_state_artifact
+          path: ~/test_state.tar.gz
