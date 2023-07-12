@@ -12,8 +12,8 @@ runs:
       uses: actions/cache@v2
       with:
         path: |
-          ~/bitcoin-core-22.0/bitcoin-22.0/bin/bitcoind
-          ~/bitcoin-core-22.0/bitcoin-22.0/bin/bitcoin-cli
+          ~/bitcoin-core-${{ inputs.bitcoin-version }}/bitcoin-${{ inputs.bitcoin-version }}/bin/bitcoind
+          ~/bitcoin-core-${{ inputs.bitcoin-version }}/bitcoin-${{ inputs.bitcoin-version }}/bin/bitcoin-cli
         key: bitcoin-core-${{ inputs.bitcoin-version }}
 
     - name: Setup dependencies
