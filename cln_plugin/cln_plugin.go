@@ -19,7 +19,6 @@ import (
 const (
 	SubscriberTimeoutOption = "lsp-subscribertimeout"
 	ListenAddressOption     = "lsp-listen"
-	channelAcceptScript     = "lsp-channel-accept-script"
 )
 
 var (
@@ -44,12 +43,11 @@ var (
 )
 
 type ClnPlugin struct {
-	done                chan struct{}
-	server              *server
-	in                  *os.File
-	out                 *bufio.Writer
-	writeMtx            sync.Mutex
-	channelAcceptScript string
+	done     chan struct{}
+	server   *server
+	in       *os.File
+	out      *bufio.Writer
+	writeMtx sync.Mutex
 }
 
 func NewClnPlugin(in, out *os.File) *ClnPlugin {
@@ -212,20 +210,6 @@ func (c *ClnPlugin) processRequest(request *Request) {
 		c.handleShutdown(request)
 	case "htlc_accepted":
 		c.handleHtlcAccepted(request)
-	case "openchannel":
-		// handle open channel in a goroutine, because order doesn't  matter.
-		go c.handleOpenChannel(request)
-	case "openchannel2":
-		// handle open channel in a goroutine, because order doesn't  matter.
-		go c.handleOpenChannel(request)
-	case "getchannelacceptscript":
-		c.sendToCln(&Response{
-			JsonRpc: SpecVersion,
-			Id:      request.Id,
-			Result:  c.channelAcceptScript,
-		})
-	case "setchannelacceptscript":
-		c.handleSetChannelAcceptScript(request)
 	default:
 		c.sendError(
 			request.Id,
@@ -255,27 +239,13 @@ func (c *ClnPlugin) handleGetManifest(request *Request) {
 						"if no subscriber is active. golang duration string.",
 					Default: &DefaultSubscriberTimeout,
 				},
-				{
-					Name:        channelAcceptScript,
-					Type:        "string",
-					Description: "starlark script for channel acceptor.",
-				},
 			},
-			RpcMethods: []*RpcMethod{
-				{
-					Name:        "getchannelacceptscript",
-					Description: "Get the startlark channel acceptor script",
-				},
-				{
-					Name:        "setchannelacceptscript",
-					Description: "Set the startlark channel acceptor script",
-				},
-			},
-			Dynamic: true,
+			RpcMethods: []*RpcMethod{},
+			Dynamic:    true,
 			Hooks: []Hook{
-				{Name: "htlc_accepted"},
-				{Name: "openchannel"},
-				{Name: "openchannel2"},
+				{
+					Name: "htlc_accepted",
+				},
 			},
 			NonNumericIds: true,
 			Subscriptions: []string{
@@ -296,31 +266,6 @@ func (c *ClnPlugin) handleInit(request *Request) {
 			request.Id,
 			ParseError,
 			fmt.Sprintf("Failed to unmarshal init params: %v", err),
-		)
-		return
-	}
-
-	// Get the channel acceptor script option.
-	sc, ok := initMsg.Options[channelAcceptScript]
-	if !ok {
-		c.sendError(
-			request.Id,
-			InvalidParams,
-			fmt.Sprintf("Missing option '%s'", channelAcceptScript),
-		)
-		return
-	}
-
-	c.channelAcceptScript, ok = sc.(string)
-	if !ok {
-		c.sendError(
-			request.Id,
-			InvalidParams,
-			fmt.Sprintf(
-				"Invalid value '%v' for option '%s'",
-				sc,
-				channelAcceptScript,
-			),
 		)
 		return
 	}
@@ -435,79 +380,6 @@ func (c *ClnPlugin) handleHtlcAccepted(request *Request) {
 	}
 
 	c.server.Send(idToString(request.Id), &htlc)
-}
-
-func (c *ClnPlugin) handleSetChannelAcceptScript(request *Request) {
-	var params []string
-	err := json.Unmarshal(request.Params, &params)
-	if err != nil {
-		c.sendError(
-			request.Id,
-			ParseError,
-			fmt.Sprintf(
-				"Failed to unmarshal setchannelacceptscript params:%s [%s]",
-				err.Error(),
-				request.Params,
-			),
-		)
-		return
-	}
-	if len(params) >= 1 {
-		c.channelAcceptScript = params[0]
-	}
-	c.sendToCln(&Response{
-		JsonRpc: SpecVersion,
-		Id:      request.Id,
-		Result:  c.channelAcceptScript,
-	})
-}
-
-func unmarshalOpenChannel(request *Request) (r json.RawMessage, err error) {
-	switch request.Method {
-	case "openchannel":
-		var openChannel struct {
-			OpenChannel json.RawMessage `json:"openchannel"`
-		}
-		err = json.Unmarshal(request.Params, &openChannel)
-		if err != nil {
-			return
-		}
-		r = openChannel.OpenChannel
-	case "openchannel2":
-		var openChannel struct {
-			OpenChannel json.RawMessage `json:"openchannel2"`
-		}
-		err = json.Unmarshal(request.Params, &openChannel)
-		if err != nil {
-			return
-		}
-		r = openChannel.OpenChannel
-	}
-	return r, nil
-}
-func (c *ClnPlugin) handleOpenChannel(request *Request) {
-	p, err := unmarshalOpenChannel(request)
-	if err != nil {
-		c.sendError(
-			request.Id,
-			ParseError,
-			fmt.Sprintf(
-				"Failed to unmarshal openchannel params:%s [%s]",
-				err.Error(),
-				request.Params,
-			),
-		)
-		return
-	}
-	result, err := channelAcceptor(c.channelAcceptScript, request.Method, p)
-	if err != nil {
-		log.Printf("channelAcceptor error - request: %s error: %v", request, err)
-	}
-	c.sendToCln(&Response{
-		JsonRpc: SpecVersion,
-		Id:      request.Id,
-		Result:  result,
-	})
 }
 
 // Sends an error to cln.
