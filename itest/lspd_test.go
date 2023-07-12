@@ -131,6 +131,10 @@ var allTestCases = []*testCase{
 		test: testRegularForward,
 	},
 	{
+		name: "testRegularPayment",
+		test: testRegularPayment,
+	},
+	{
 		name: "testProbing",
 		test: testProbing,
 	},
