@@ -1,0 +1,93 @@
+name: integration tests
+on: [push]
+jobs:
+  setup:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Bitcoin Core
+        if: steps.cache-bitcoin.outputs.cache-hit != 'true'
+        uses: ./.github/actions/setup-bitcoin
+        with:
+          bitcoin-version: '22.0'
+
+      - name: Set up LND LSP
+        if: steps.cache-lnd-lsp.outputs.cache-hit != 'true'
+        uses: ./.github/actions/setup-lnd-lsp
+        with:
+          lsp-ref: 'breez-node-v0.16.2-beta'
+          go-version: ^1.19
+
+      - name: Set up LND client
+        if: steps.cache-lnd-client.outputs.cache-hit != 'true'
+        uses: ./.github/actions/setup-lnd-client
+        with:
+          client-ref: 'v0.16.2-breez'
+          go-version: ^1.19
+
+      - name: Set up Core Lightning
+        uses: ./.github/actions/setup-clightning
+        with:
+          checkout-version: 'v23.05.1'
+
+      - name: Build LSPD
+        run: |
+          go get github.com/breez/lspd
+          go get github.com/breez/lspd/cln_plugin
+          go build .
+          go build -o lspd_plugin ./cln_plugin/cmd
+        shell: bash
+
+      - name: Test LSPD
+        run: |
+          go get github.com/breez/lspd/itest
+          TESTRE="TestLspd"
+          go test -timeout 45m -v \
+            ./itest \
+            -test.run \
+            ${TESTRE} \
+            --bitcoindexec /usr/bin/bitcoind \
+            --bitcoincliexec /usr/bin/bitcoin-cli \
+            --lightningdexec ${GITHUB_WORKSPACE}/lightning_git/lightningd/lightningd \
+            --lndexec ~/go_lnd_lsp/bin/lnd \
+            --lndmobileexec ~/go_lnd_client/bin/lnd \
+            --clnpluginexec ${GITHUB_WORKSPACE}/lspd_plugin \
+            --lspdexec ${GITHUB_WORKSPACE}/lspd \
+            --lspdmigrationsdir ${GITHUB_WORKSPACE}/postgresql/migrations \
+            --preservelogs \
+            --testdir /home/runner/test_state || echo "step_failed=true" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Check if test_state directory exists
+        id: check-test-state
+        run: |
+          ls -l
+          ls -l /home/runner/test_state
+          if [ -d "/home/runner/test_state" ]; then
+            echo "exists=true" >> $GITHUB_ENV
+          else
+            echo "exists=false" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Tar state
+        run: |
+          find /home/runner/test_state -type f -o -type d | tar -czf /home/runner/test_state.tar.gz -T -
+        shell: bash
+        if: env.exists == 'true'
+
+      - name: Upload test_state as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test_state_artifact
+          path: /home/runner/test_state.tar.gz
+        if: env.exists == 'true'
+
+      - name: Fail the workflow if the tests failed
+        run: |
+          if [[ "${{ env.step_failed }}" == "true" ]]
+          then
+            exit 1
+          fi
