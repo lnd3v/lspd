@@ -102,6 +102,14 @@ runs:
           ~/bitcoin-core-${{ inputs.bitcoin-version }}/bitcoin-${{ inputs.bitcoin-version }}/bin/bitcoin-cli
         key: bitcoin-core-${{ inputs.bitcoin-version }}
 
+    - name: Cache itest
+      id: cache-itest
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/go
+        key: itest
+
     - name: Test LSPD
       run: |
         go get github.com/breez/lspd/itest

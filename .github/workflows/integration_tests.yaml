@@ -65,10 +65,16 @@ jobs:
       - name: Build LSPD and Upload Artifacts
         uses: ./.github/actions/build-lspd
 
+  setup-itest:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Setup itest
+        uses: ./.github/actions/setup-itest
 
   TestLspd-LND-lspd_testOpenZeroConfChannelOnReceive:
     runs-on: ubuntu-20.04
     needs:
+      - setup-itest
       - setup-bitcoin-core
       - setup-lnd-client
       - setup-lnd-lsp
@@ -89,623 +95,623 @@ jobs:
           GO_VERSION: ${{ env.GO_VERSION }}
           CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testOpenZeroConfSingleHtlc:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testOpenZeroConfSingleHtlc:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testOpenZeroConfSingleHtlc"
-          artifact-name: TestLspd-LND-lspd_testOpenZeroConfSingleHtlc
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testOpenZeroConfSingleHtlc"
+  #         artifact-name: TestLspd-LND-lspd_testOpenZeroConfSingleHtlc
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testZeroReserve:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testZeroReserve:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testZeroReserve"
-          artifact-name: TestLspd-LND-lspd_testZeroReserve
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testZeroReserve"
+  #         artifact-name: TestLspd-LND-lspd_testZeroReserve
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testFailureBobOffline:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testFailureBobOffline:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testFailureBobOffline"
-          artifact-name: TestLspd-LND-lspd_testFailureBobOffline
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testFailureBobOffline"
+  #         artifact-name: TestLspd-LND-lspd_testFailureBobOffline
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testNoBalance:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testNoBalance:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testNoBalance"
-          artifact-name: TestLspd-LND-lspd_testNoBalance
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testNoBalance"
+  #         artifact-name: TestLspd-LND-lspd_testNoBalance
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testRegularForward:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testRegularForward:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testRegularForward"
-          artifact-name: TestLspd-LND-lspd_testRegularForward
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testRegularForward"
+  #         artifact-name: TestLspd-LND-lspd_testRegularForward
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testProbing:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testProbing:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testProbing"
-          artifact-name: TestLspd-LND-lspd_testProbing
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testProbing"
+  #         artifact-name: TestLspd-LND-lspd_testProbing
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testInvalidCltv:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testInvalidCltv:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testInvalidCltv"
-          artifact-name: TestLspd-LND-lspd_testInvalidCltv
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testInvalidCltv"
+  #         artifact-name: TestLspd-LND-lspd_testInvalidCltv
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_registerPaymentWithTag:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_registerPaymentWithTag:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_registerPaymentWithTag"
-          artifact-name: TestLspd-LND-lspd_registerPaymentWithTag
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_registerPaymentWithTag"
+  #         artifact-name: TestLspd-LND-lspd_registerPaymentWithTag
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testOpenZeroConfUtxo:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testOpenZeroConfUtxo:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testOpenZeroConfUtxo"
-          artifact-name: TestLspd-LND-lspd_testOpenZeroConfUtxo
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testOpenZeroConfUtxo"
+  #         artifact-name: TestLspd-LND-lspd_testOpenZeroConfUtxo
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testDynamicFeeFlow:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testDynamicFeeFlow:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testDynamicFeeFlow"
-          artifact-name: TestLspd-LND-lspd_testDynamicFeeFlow
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testDynamicFeeFlow"
+  #         artifact-name: TestLspd-LND-lspd_testDynamicFeeFlow
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testOfflineNotificationPaymentRegistered:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testOfflineNotificationPaymentRegistered:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testOfflineNotificationPaymentRegistered"
-          artifact-name: TestLspd-LND-lspd_testOfflineNotificationPaymentRegistered
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testOfflineNotificationPaymentRegistered"
+  #         artifact-name: TestLspd-LND-lspd_testOfflineNotificationPaymentRegistered
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testOfflineNotificationRegularForward:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testOfflineNotificationRegularForward:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testOfflineNotificationRegularForward"
-          artifact-name: TestLspd-LND-lspd_testOfflineNotificationRegularForward
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testOfflineNotificationRegularForward"
+  #         artifact-name: TestLspd-LND-lspd_testOfflineNotificationRegularForward
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-LND-lspd_testOfflineNotificationZeroConfChannel:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-LND-lspd_testOfflineNotificationZeroConfChannel:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/LND-lspd:_testOfflineNotificationZeroConfChannel"
-          artifact-name: TestLspd-LND-lspd_testOfflineNotificationZeroConfChannel
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/LND-lspd:_testOfflineNotificationZeroConfChannel"
+  #         artifact-name: TestLspd-LND-lspd_testOfflineNotificationZeroConfChannel
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testOpenZeroConfChannelOnReceive:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testOpenZeroConfChannelOnReceive:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testOpenZeroConfChannelOnReceive"
-          artifact-name: TestLspd-CLN-lspd_testOpenZeroConfChannelOnReceive
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testOpenZeroConfChannelOnReceive"
+  #         artifact-name: TestLspd-CLN-lspd_testOpenZeroConfChannelOnReceive
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testOpenZeroConfSingleHtlc:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testOpenZeroConfSingleHtlc:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testOpenZeroConfSingleHtlc"
-          artifact-name: TestLspd-CLN-lspd_testOpenZeroConfSingleHtlc
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testOpenZeroConfSingleHtlc"
+  #         artifact-name: TestLspd-CLN-lspd_testOpenZeroConfSingleHtlc
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testZeroReserve:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testZeroReserve:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testZeroReserve"
-          artifact-name: TestLspd-CLN-lspd_testZeroReserve
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testZeroReserve"
+  #         artifact-name: TestLspd-CLN-lspd_testZeroReserve
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testFailureBobOffline:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testFailureBobOffline:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testFailureBobOffline"
-          artifact-name: TestLspd-CLN-lspd_testFailureBobOffline
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testFailureBobOffline"
+  #         artifact-name: TestLspd-CLN-lspd_testFailureBobOffline
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testNoBalance:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testNoBalance:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testNoBalance"
-          artifact-name: TestLspd-CLN-lspd_testNoBalance
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testNoBalance"
+  #         artifact-name: TestLspd-CLN-lspd_testNoBalance
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testRegularForward:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testRegularForward:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testRegularForward"
-          artifact-name: TestLspd-CLN-lspd_testRegularForward
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testRegularForward"
+  #         artifact-name: TestLspd-CLN-lspd_testRegularForward
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testProbing:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testProbing:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testProbing"
-          artifact-name: TestLspd-CLN-lspd_testProbing
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testProbing"
+  #         artifact-name: TestLspd-CLN-lspd_testProbing
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testInvalidCltv:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testInvalidCltv:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testInvalidCltv"
-          artifact-name: TestLspd-CLN-lspd_testInvalidCltv
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testInvalidCltv"
+  #         artifact-name: TestLspd-CLN-lspd_testInvalidCltv
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_registerPaymentWithTag:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_registerPaymentWithTag:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_registerPaymentWithTag"
-          artifact-name: TestLspd-CLN-lspd_registerPaymentWithTag
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_registerPaymentWithTag"
+  #         artifact-name: TestLspd-CLN-lspd_registerPaymentWithTag
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testOpenZeroConfUtxo:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testOpenZeroConfUtxo:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testOpenZeroConfUtxo"
-          artifact-name: TestLspd-CLN-lspd_testOpenZeroConfUtxo
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testOpenZeroConfUtxo"
+  #         artifact-name: TestLspd-CLN-lspd_testOpenZeroConfUtxo
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testDynamicFeeFlow:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testDynamicFeeFlow:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testDynamicFeeFlow"
-          artifact-name: TestLspd-CLN-lspd_testDynamicFeeFlow
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testDynamicFeeFlow"
+  #         artifact-name: TestLspd-CLN-lspd_testDynamicFeeFlow
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testOfflineNotificationPaymentRegistered:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testOfflineNotificationPaymentRegistered:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testOfflineNotificationPaymentRegistered"
-          artifact-name: TestLspd-CLN-lspd_testOfflineNotificationPaymentRegistered
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testOfflineNotificationPaymentRegistered"
+  #         artifact-name: TestLspd-CLN-lspd_testOfflineNotificationPaymentRegistered
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testOfflineNotificationRegularForward:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testOfflineNotificationRegularForward:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testOfflineNotificationRegularForward"
-          artifact-name: TestLspd-CLN-lspd_testOfflineNotificationRegularForward
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testOfflineNotificationRegularForward"
+  #         artifact-name: TestLspd-CLN-lspd_testOfflineNotificationRegularForward
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
 
-  TestLspd-CLN-lspd_testOfflineNotificationZeroConfChannel:
-    runs-on: ubuntu-20.04
-    needs:
-      - setup-bitcoin-core
-      - setup-lnd-client
-      - setup-lnd-lsp
-      - setup-cln
-      - build-lspd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # TestLspd-CLN-lspd_testOfflineNotificationZeroConfChannel:
+  #   runs-on: ubuntu-20.04
+  #   needs:
+  #     - setup-bitcoin-core
+  #     - setup-lnd-client
+  #     - setup-lnd-lsp
+  #     - setup-cln
+  #     - build-lspd
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Run and Process Test State
-        uses: ./.github/actions/test-lspd
-        with:
-          TESTRE: "TestLspd/CLN-lspd:_testOfflineNotificationZeroConfChannel"
-          artifact-name: TestLspd-CLN-lspd_testOfflineNotificationZeroConfChannel
-          bitcoin-version: ${{ env.BITCOIN_VERSION }}
-          LSP_REF: ${{ env.LSP_REF }}
-          CLIENT_REF: ${{ env.CLIENT_REF }}
-          GO_VERSION: ${{ env.GO_VERSION }}
-          CLN_VERSION: ${{ env.CLN_VERSION }}
+  #     - name: Run and Process Test State
+  #       uses: ./.github/actions/test-lspd
+  #       with:
+  #         TESTRE: "TestLspd/CLN-lspd:_testOfflineNotificationZeroConfChannel"
+  #         artifact-name: TestLspd-CLN-lspd_testOfflineNotificationZeroConfChannel
+  #         bitcoin-version: ${{ env.BITCOIN_VERSION }}
+  #         LSP_REF: ${{ env.LSP_REF }}
+  #         CLIENT_REF: ${{ env.CLIENT_REF }}
+  #         GO_VERSION: ${{ env.GO_VERSION }}
+  #         CLN_VERSION: ${{ env.CLN_VERSION }}
