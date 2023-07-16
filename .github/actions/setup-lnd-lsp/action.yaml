@@ -41,5 +41,5 @@ runs:
       if: steps.cache-lnd-lsp.outputs.cache-hit != 'true'
       run: |
         cd lnd_lsp
-        env GOPATH=~/go_lnd_lsp make install tags='chanreservedynamic'
+        env GOPATH=~/go_lnd_lsp make install tags='submarineswaprpc chanreservedynamic routerrpc walletrpc chainrpc signrpc invoicesrpc'
       shell: bash
